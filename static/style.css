@@ -1,0 +1,37 @@
+/* Custom styles for AI Influencer Automation Dashboard */
+
+.active-tab {
+    border-color: #2563eb !important;
+    color: #2563eb !important;
+}
+
+.status-pill.active {
+    background-color: #1e293b;
+    color: #ffffff;
+}
+
+/* Status Badges */
+.badge-new-lead { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+.badge-email-available { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.badge-email-sent { background-color: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+.badge-followup-due { background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+.badge-replied { background-color: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+.badge-interested { background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.badge-not-interested { background-color: #ffe4e6; color: #be123c; border: 1px solid #fecdd3; }
+.badge-collaboration-confirmed { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}

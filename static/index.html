@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Influencer Outreach & CRM Automation | Sankar Group</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">AI Influencer Outreach Assistant</h1>
+                    <p class="text-xs text-slate-500 font-medium">Sankar Group Internship Practical Project • End-to-End Pipeline</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span> Claude AI & Engine Active
+                </span>
+                <button onclick="openSettingsModal()" class="text-slate-600 hover:text-slate-900 text-sm font-medium flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-gear"></i> Campaign Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-8 overflow-x-auto py-2 text-sm font-semibold">
+                <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="nav-tab active-tab flex items-center gap-2 px-3 py-2 border-b-2 border-blue-600 text-blue-600">
+                    <i class="fa-solid fa-chart-pie"></i> Overview & KPIs
+                </button>
+                <button onclick="switchTab('research')" id="tab-btn-research" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-brands fa-instagram"></i> 1. Instagram Research
+                </button>
+                <button onclick="switchTab('filter')" id="tab-btn-filter" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 2. Claude AI Filtering
+                </button>
+                <button onclick="switchTab('crm')" id="tab-btn-crm" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-table-list"></i> 3. Google Sheets & CRM
+                </button>
+                <button onclick="switchTab('cold-email')" id="tab-btn-cold-email" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-paper-plane"></i> 4. AI Cold Email
+                </button>
+                <button onclick="switchTab('followups')" id="tab-btn-followups" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-clock-rotate-left"></i> 5. Follow-ups
+                </button>
+                <button onclick="switchTab('replies')" id="tab-btn-replies" class="nav-tab flex items-center gap-2 px-3 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-inbox"></i> 6. AI Reply Manager
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- TAB: DASHBOARD & OVERVIEW -->
+        <section id="tab-dashboard" class="tab-pane block space-y-6">
+            <!-- Quick KPI Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Total Leads in CRM</span>
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900" id="kpi-total-leads">0</div>
+                    <p class="text-xs text-slate-500 mt-1" id="kpi-emails-available">0 with verified email</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Outreach Emails Sent</span>
+                        <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                            <i class="fa-solid fa-envelope-circle-check"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900" id="kpi-emails-sent">0</div>
+                    <p class="text-xs text-slate-500 mt-1">Anti-spam compliant</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Incoming Replies</span>
+                        <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                            <i class="fa-solid fa-reply-all"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900" id="kpi-total-replies">0</div>
+                    <p class="text-xs text-slate-500 mt-1" id="kpi-interested-count">0 positive responses</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between text-slate-500 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-wider">Collaborations Confirmed</span>
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-900" id="kpi-confirmed">0</div>
+                    <p class="text-xs text-emerald-600 font-medium mt-1">Active Partnership Deals</p>
+                </div>
+            </div>
+
+            <!-- Workflow Visual Pipeline -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-blue-600"></i> Automated End-to-End Pipeline Status
+                </h3>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 text-center" id="status-badges-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Quick Action Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center mb-3">
+                            <i class="fa-brands fa-instagram text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1">Step 1: Discover Creators</h4>
+                        <p class="text-xs text-blue-200 leading-relaxed">
+                            Search public Instagram influencers by niche, location, follower range, and collect verified business emails.
+                        </p>
+                    </div>
+                    <button onclick="switchTab('research')" class="mt-4 bg-white text-blue-900 font-bold text-xs py-2 px-4 rounded-lg hover:bg-blue-50 transition w-full text-center">
+                        Open Influencer Research &rarr;
+                    </button>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-900 to-violet-900 text-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1">Step 2: Claude AI Filtering</h4>
+                        <p class="text-xs text-purple-200 leading-relaxed">
+                            Score creators 0-100, analyze content relevance, generate executive summaries, and extract personalization hooks.
+                        </p>
+                    </div>
+                    <button onclick="switchTab('filter')" class="mt-4 bg-white text-purple-900 font-bold text-xs py-2 px-4 rounded-lg hover:bg-purple-50 transition w-full text-center">
+                        Filter & Score Prospects &rarr;
+                    </button>
+                </div>
+
+                <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white p-6 rounded-xl shadow-md flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-paper-plane text-xl"></i>
+                        </div>
+                        <h4 class="text-lg font-bold mb-1">Step 4-6: Outreach & Replies</h4>
+                        <p class="text-xs text-emerald-200 leading-relaxed">
+                            Draft CAN-SPAM compliant personalized emails, run approval queues, schedule follow-ups, and auto-triage replies.
+                        </p>
+                    </div>
+                    <button onclick="switchTab('cold-email')" class="mt-4 bg-white text-emerald-900 font-bold text-xs py-2 px-4 rounded-lg hover:bg-emerald-50 transition w-full text-center">
+                        Launch Campaign & Approvals &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 1 - INSTAGRAM RESEARCH -->
+        <section id="tab-research" class="tab-pane hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Step 1: Instagram Influencer Research</h3>
+                        <p class="text-xs text-slate-500">Ethically identify relevant creators based on niche, location, follower range, and public business contacts.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="loadSeedCreatorsToCRM()" class="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-bold py-2 px-3 rounded-lg transition">
+                            <i class="fa-solid fa-cloud-arrow-down mr-1"></i> Quick Load All Seed Leads (10)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Filters Form -->
+                <form id="research-form" onsubmit="handleResearchSubmit(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Niche / Category</label>
+                        <input type="text" id="research-niche" value="Health & Wellness" class="w-full text-xs px-3 py-2 bg-white rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Keywords</label>
+                        <input type="text" id="research-keywords" placeholder="adaptogens, organic, morning ritual" class="w-full text-xs px-3 py-2 bg-white rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Location</label>
+                        <input type="text" id="research-location" placeholder="e.g. Austin, New York, London" class="w-full text-xs px-3 py-2 bg-white rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Follower Range</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="number" id="research-min-followers" value="10000" class="w-1/2 text-xs px-2 py-2 bg-white rounded-lg border border-slate-300">
+                            <span class="text-xs text-slate-400">to</span>
+                            <input type="number" id="research-max-followers" value="250000" class="w-1/2 text-xs px-2 py-2 bg-white rounded-lg border border-slate-300">
+                        </div>
+                    </div>
+                    <div class="md:col-span-4 flex items-center justify-between pt-2">
+                        <label class="inline-flex items-center text-xs text-slate-600 font-medium">
+                            <input type="checkbox" id="research-live-search" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 mr-2">
+                            Enable Live Web Search Discovery (Query public web for creator business emails)
+                        </label>
+                        <button type="submit" id="btn-run-research" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2 px-6 rounded-lg transition shadow-sm flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Search Influencers
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Search Results Grid -->
+                <div class="mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-bold text-slate-800" id="research-results-heading">Discovered Creators</h4>
+                        <span class="text-xs text-slate-500" id="research-results-count">0 creators found</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="research-results-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 2 - CLAUDE AI FILTERING -->
+        <section id="tab-filter" class="tab-pane hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Step 2: AI-Based Influencer Filtering (Claude AI)</h3>
+                        <p class="text-xs text-slate-500">Claude evaluates creator profiles, scores brand alignment (0-100), extracts personalization hooks, and assigns priority.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="evaluateAllInfluencers()" id="btn-eval-all" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Run Claude AI Evaluation on All Leads
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Evaluation Cards List -->
+                <div class="space-y-4" id="ai-evaluation-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 3 - CRM & GOOGLE SHEETS -->
+        <section id="tab-crm" class="tab-pane hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Step 3: Google Sheets & CRM Integration</h3>
+                        <p class="text-xs text-slate-500">Unified local database with duplicate prevention, real-time Google Sheets sync, and CSV/Excel exports.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="/api/export/csv" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-csv text-emerald-600"></i> Download CSV
+                        </a>
+                        <a href="/api/export/excel" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold py-2 px-3 rounded-lg transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-excel text-emerald-700"></i> Download Excel
+                        </a>
+                        <button onclick="syncGoogleSheets()" id="btn-sync-sheets" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-brands fa-google-drive"></i> Sync to Google Sheets
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Status Filter Pills -->
+                <div class="flex flex-wrap gap-2 mb-4" id="crm-status-filters">
+                    <button onclick="filterCRMByStatus('')" class="status-pill active bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-full">All Leads</button>
+                    <button onclick="filterCRMByStatus('New Lead')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">New Lead</button>
+                    <button onclick="filterCRMByStatus('Email Available')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Email Available</button>
+                    <button onclick="filterCRMByStatus('Email Sent')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Email Sent</button>
+                    <button onclick="filterCRMByStatus('Follow-up Due')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Follow-up Due</button>
+                    <button onclick="filterCRMByStatus('Replied')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Replied</button>
+                    <button onclick="filterCRMByStatus('Interested')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Interested</button>
+                    <button onclick="filterCRMByStatus('Not Interested')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Not Interested</button>
+                    <button onclick="filterCRMByStatus('Collaboration Confirmed')" class="status-pill bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-slate-200">Collaboration Confirmed</button>
+                </div>
+
+                <!-- CRM Table -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl shadow-sm">
+                    <table class="min-w-full divide-y divide-slate-200 text-xs">
+                        <thead class="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider text-left">
+                            <tr>
+                                <th class="px-4 py-3">Creator</th>
+                                <th class="px-4 py-3">Niche</th>
+                                <th class="px-4 py-3">Followers</th>
+                                <th class="px-4 py-3">Business Contact</th>
+                                <th class="px-4 py-3">Score</th>
+                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white" id="crm-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 4 - AI COLD EMAIL OUTREACH -->
+        <section id="tab-cold-email" class="tab-pane hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Step 4: AI-Powered Cold Email & Approval Queue</h3>
+                        <p class="text-xs text-slate-500">Claude drafts tailored outreach emails compliant with CAN-SPAM. Requires human approval before initial send.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="batchGenerateColdEmails()" id="btn-batch-generate" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Batch Generate Drafts (Score &ge; 60)
+                        </button>
+                        <button onclick="batchApproveAndSendEmails()" id="btn-batch-send" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i> Batch Approve & Send All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Approval Queue Cards -->
+                <div class="space-y-4" id="email-approval-queue">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 5 - AUTOMATED FOLLOW-UPS -->
+        <section id="tab-followups" class="tab-pane hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Step 5: Automated Follow-up Email Engine</h3>
+                        <p class="text-xs text-slate-500">Automatically tracks sent emails. Follow-up 1 after 3-5 days, Follow-up 2 after 5-7 days. Immediately stops on reply/opt-out.</p>
+                    </div>
+                    <!-- Timeline Fast Forward Test Tool -->
+                    <div class="flex items-center gap-2 bg-amber-50 p-2 rounded-xl border border-amber-200">
+                        <span class="text-xs font-bold text-amber-800 flex items-center gap-1">
+                            <i class="fa-solid fa-forward-fast"></i> Test Simulator:
+                        </span>
+                        <button onclick="fastForwardTimeline(3)" class="bg-white text-amber-800 border border-amber-300 hover:bg-amber-100 text-xs font-bold py-1.5 px-3 rounded-lg transition">
+                            +3 Days
+                        </button>
+                        <button onclick="fastForwardTimeline(5)" class="bg-white text-amber-800 border border-amber-300 hover:bg-amber-100 text-xs font-bold py-1.5 px-3 rounded-lg transition">
+                            +5 Days
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Due Follow-ups List -->
+                <div class="space-y-4" id="followups-due-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: STEP 6 - AI REPLY MANAGEMENT -->
+        <section id="tab-replies" class="tab-pane hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Reply Simulator Tool -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-vial-circle-check text-indigo-600"></i> Interactive Reply Simulator
+                    </h3>
+                    <p class="text-xs text-slate-500">Simulate incoming emails from influencers to demonstrate Claude AI classification and auto-drafting.</p>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Select Contacted Influencer</label>
+                        <select id="reply-sim-influencer" class="w-full text-xs px-3 py-2 bg-white rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <!-- Populated with contacted creators -->
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Quick Scenarios</label>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <button type="button" onclick="loadReplyScenario('interested')" class="p-2 text-left bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-200 hover:bg-emerald-100">
+                                <strong>1. Interested</strong>
+                                <span class="block text-[10px] text-emerald-600">Wants to try product</span>
+                            </button>
+                            <button type="button" onclick="loadReplyScenario('pricing')" class="p-2 text-left bg-blue-50 text-blue-800 rounded-lg border border-blue-200 hover:bg-blue-100">
+                                <strong>2. Pricing Query</strong>
+                                <span class="block text-[10px] text-blue-600">Asks for reel budget</span>
+                            </button>
+                            <button type="button" onclick="loadReplyScenario('collab')" class="p-2 text-left bg-purple-50 text-purple-800 rounded-lg border border-purple-200 hover:bg-purple-100">
+                                <strong>3. Collab Terms</strong>
+                                <span class="block text-[10px] text-purple-600">Counter-proposes 1 Reel</span>
+                            </button>
+                            <button type="button" onclick="loadReplyScenario('decline')" class="p-2 text-left bg-rose-50 text-rose-800 rounded-lg border border-rose-200 hover:bg-rose-100">
+                                <strong>4. Not Interested</strong>
+                                <span class="block text-[10px] text-rose-600">Declines & opts out</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Incoming Message Body</label>
+                        <textarea id="reply-sim-body" rows="4" class="w-full text-xs p-3 bg-slate-50 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"></textarea>
+                    </div>
+
+                    <button onclick="submitSimulatedReply()" id="btn-submit-reply" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-4 rounded-lg transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> Send & Classify with Claude AI
+                    </button>
+                </div>
+
+                <!-- Incoming Replies Queue & Approval -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">AI Reply Management & Approval Queue</h3>
+                            <p class="text-xs text-slate-500">AI classifications, suggested next actions, and drafted responses requiring human review.</p>
+                        </div>
+                        <button onclick="loadPendingReplies()" class="text-xs text-blue-600 hover:underline">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="space-y-4" id="replies-approval-queue">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Campaign Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-blue-600"></i> Campaign & Integration Configuration
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="settings-form" onsubmit="saveCampaignSettings(event)" class="space-y-4 mt-4 text-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Brand Name</label>
+                        <input type="text" id="cfg-brand-name" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Brand Niche</label>
+                        <input type="text" id="cfg-brand-niche" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Product Name & Description</label>
+                    <input type="text" id="cfg-product-name" class="w-full px-3 py-2 rounded-lg border border-slate-300 mb-2" placeholder="Product Name">
+                    <textarea id="cfg-product-desc" rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300" placeholder="Product Description"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Collaboration Offer / Perks</label>
+                    <input type="text" id="cfg-collab-type" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Sender Name & Title</label>
+                        <input type="text" id="cfg-sender-name" class="w-full px-3 py-2 rounded-lg border border-slate-300 mb-2" placeholder="Name">
+                        <input type="text" id="cfg-sender-title" class="w-full px-3 py-2 rounded-lg border border-slate-300" placeholder="Title">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Sender Email</label>
+                        <input type="email" id="cfg-sender-email" class="w-full px-3 py-2 rounded-lg border border-slate-300 mb-2">
+                        <label class="block font-bold text-slate-700 mb-1">Company Physical Address (CAN-SPAM)</label>
+                        <input type="text" id="cfg-company-address" class="w-full px-3 py-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg font-bold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold">Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs font-medium">
+            <span id="toast-icon" class="text-blue-400"><i class="fa-solid fa-circle-check"></i></span>
+            <span id="toast-message">Action completed</span>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

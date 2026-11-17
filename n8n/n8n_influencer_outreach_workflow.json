@@ -1,0 +1,335 @@
+{
+  "name": "AI-Powered Instagram Influencer Research & Outreach Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-5"
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Schedule Trigger (9 AM Daily)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/research",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "niche", "value": "Health & Wellness" },
+            { "name": "min_followers", "value": "10000" },
+            { "name": "max_followers", "value": "200000" },
+            { "name": "live_search", "value": "false" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2",
+      "name": "Step 1: Instagram Research & Contact Collection",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Split Influencer Leads",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [540, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "prompt": "Evaluate this Instagram creator for our brand campaign (AuraWellness Organics):\nName: {{$json.name}}\nHandle: @{{$json.username}}\nNiche: {{$json.niche}}\nFollowers: {{$json.follower_count}}\nBio: {{$json.bio}}\n\nReturn JSON with suitability_score (0-100), priority, profile_summary, and personalization_hooks.",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "id": "4",
+      "name": "Step 2: Claude AI Profile Evaluator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [760, 300]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "INFLUENCER_CRM_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Influencer CRM",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "options": {}
+      },
+      "id": "5",
+      "name": "Step 3: Google Sheets CRM Sync",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [980, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.suitability_score}}",
+              "operation": "largerEqual",
+              "value2": 60
+            }
+          ],
+          "string": [
+            {
+              "value1": "={{$json.email}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "6",
+      "name": "Filter: Score >= 60 & Has Email",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "prompt": "Draft a personalized, CAN-SPAM compliant cold outreach email for creator {{$json.name}} (@{{$json.username}}). Personalization hook: {{$json.personalization_hooks}}. Offer: Free 30-day VIP adaptogen elixir + $250 sponsored reel. Include physical company address and unsubscribe note.",
+        "options": {}
+      },
+      "id": "7",
+      "name": "Step 4: Claude AI Cold Email Drafter",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [1420, 240]
+    },
+    {
+      "parameters": {
+        "channel": "#influencer-outreach-approvals",
+        "text": "New Influencer Cold Email Ready for Approval:\nCreator: {{$json.name}} ({{$json.email}})\nSubject: {{$json.subject}}\nBody:\n{{$json.body}}\nApprove: http://127.0.0.1:8000/api/emails/approve/{{$json.email_id}}"
+      },
+      "id": "8",
+      "name": "Human Approval Notification (Slack/Webhook)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [1640, 240]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.email}}",
+        "subject": "={{$json.subject}}",
+        "message": "={{$json.body}}",
+        "options": {}
+      },
+      "id": "9",
+      "name": "Gmail: Send Approved Cold Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1860, 240]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      },
+      "id": "10",
+      "name": "Step 5: Wait 3-5 Days (Follow-up Window)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2080, 240]
+    },
+    {
+      "parameters": {
+        "operation": "getRecent",
+        "filters": {
+          "q": "=from:{{$json.email}}"
+        }
+      },
+      "id": "11",
+      "name": "Gmail: Check for Incoming Reply",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2300, 240]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json.messages.length > 0}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "12",
+      "name": "IF: Creator Replied?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2520, 240]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "prompt": "Read this incoming reply from creator {{$json.email}}:\n{{$json.messages[0].snippet}}\nClassify into: Interested, Not Interested, Pricing Enquiries, Collaboration Requests. Generate suggested response draft and next action.",
+        "options": {}
+      },
+      "id": "13",
+      "name": "Step 6: Claude AI Reply Classifier & Drafter",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [2740, 160]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "INFLUENCER_CRM_SPREADSHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Influencer CRM",
+          "mode": "name"
+        },
+        "columnToMatchOn": "Instagram Handle",
+        "valueToMatchOn": "={{$json.username}}",
+        "fieldsUi": {
+          "values": [
+            {
+              "fieldId": "Status",
+              "fieldValue": "={{$json.classification}}"
+            }
+          ]
+        }
+      },
+      "id": "14",
+      "name": "CRM Auto-Update Status (Replied/Interested)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [2960, 160]
+    },
+    {
+      "parameters": {
+        "model": "claude-3-5-sonnet-20241022",
+        "prompt": "Draft Follow-up #1 email for {{$json.name}} reminding them of our adaptogen elixir kit offer. Keep it low-pressure, warm, and polite.",
+        "options": {}
+      },
+      "id": "15",
+      "name": "Draft Follow-up #1 (Unresponsive)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [2740, 360]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.email}}",
+        "subject": "={{$json.subject}}",
+        "message": "={{$json.body}}",
+        "options": {}
+      },
+      "id": "16",
+      "name": "Gmail: Send Follow-up #1",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2960, 360]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (9 AM Daily)": {
+      "main": [
+        [{ "node": "Step 1: Instagram Research & Contact Collection", "type": "main", "index": 0 }]
+      ]
+    },
+    "Step 1: Instagram Research & Contact Collection": {
+      "main": [
+        [{ "node": "Split Influencer Leads", "type": "main", "index": 0 }]
+      ]
+    },
+    "Split Influencer Leads": {
+      "main": [
+        [{ "node": "Step 2: Claude AI Profile Evaluator", "type": "main", "index": 0 }]
+      ]
+    },
+    "Step 2: Claude AI Profile Evaluator": {
+      "main": [
+        [{ "node": "Step 3: Google Sheets CRM Sync", "type": "main", "index": 0 }]
+      ]
+    },
+    "Step 3: Google Sheets CRM Sync": {
+      "main": [
+        [{ "node": "Filter: Score >= 60 & Has Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "Filter: Score >= 60 & Has Email": {
+      "main": [
+        [{ "node": "Step 4: Claude AI Cold Email Drafter", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Step 4: Claude AI Cold Email Drafter": {
+      "main": [
+        [{ "node": "Human Approval Notification (Slack/Webhook)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Human Approval Notification (Slack/Webhook)": {
+      "main": [
+        [{ "node": "Gmail: Send Approved Cold Email", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail: Send Approved Cold Email": {
+      "main": [
+        [{ "node": "Step 5: Wait 3-5 Days (Follow-up Window)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Step 5: Wait 3-5 Days (Follow-up Window)": {
+      "main": [
+        [{ "node": "Gmail: Check for Incoming Reply", "type": "main", "index": 0 }]
+      ]
+    },
+    "Gmail: Check for Incoming Reply": {
+      "main": [
+        [{ "node": "IF: Creator Replied?", "type": "main", "index": 0 }]
+      ]
+    },
+    "IF: Creator Replied?": {
+      "main": [
+        [{ "node": "Step 6: Claude AI Reply Classifier & Drafter", "type": "main", "index": 0 }],
+        [{ "node": "Draft Follow-up #1 (Unresponsive)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Step 6: Claude AI Reply Classifier & Drafter": {
+      "main": [
+        [{ "node": "CRM Auto-Update Status (Replied/Interested)", "type": "main", "index": 0 }]
+      ]
+    },
+    "Draft Follow-up #1 (Unresponsive)": {
+      "main": [
+        [{ "node": "Gmail: Send Follow-up #1", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}
